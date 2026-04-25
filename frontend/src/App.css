@@ -1,0 +1,48 @@
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background: #f5f7fa; }
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 260px; background: linear-gradient(180deg, #1a2742 0%, #0f1729 100%);
+  color: white; padding: 24px;
+}
+.logo { text-align: center; padding: 20px 0; border-bottom: 1px solid #2a3a5e; margin-bottom: 24px; }
+.logo h2 { margin-top: 8px; font-size: 22px; }
+.logo p { font-size: 11px; color: #8a9ab5; margin-top: 4px; }
+.sidebar nav { display: flex; flex-direction: column; gap: 6px; }
+.sidebar nav a {
+  color: #c5d2e8; text-decoration: none; padding: 12px 16px;
+  border-radius: 8px; display: flex; align-items: center; gap: 10px;
+  transition: all 0.2s; font-size: 14px;
+}
+.sidebar nav a:hover { background: #2a3a5e; color: white; }
+.content { flex: 1; padding: 32px; overflow-y: auto; }
+.page-title { font-size: 28px; color: #1a2742; margin-bottom: 24px; }
+.card {
+  background: white; padding: 24px; border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px;
+}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: white; padding: 20px; border-radius: 12px; border-left: 4px solid #4a6cf7; }
+.stat-card h3 { font-size: 28px; color: #1a2742; }
+.stat-card p { color: #8a9ab5; font-size: 13px; margin-top: 4px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+th { background: #f8f9fc; color: #1a2742; font-weight: 600; }
+.badge {
+  display: inline-block; padding: 4px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 600;
+}
+.badge-criminal { background: #ffe5e5; color: #d32f2f; }
+.badge-civil { background: #e3f2fd; color: #1976d2; }
+.badge-family { background: #f3e5f5; color: #7b1fa2; }
+.badge-corporate { background: #e8f5e9; color: #388e3c; }
+.btn {
+  background: #4a6cf7; color: white; padding: 10px 20px;
+  border: none; border-radius: 8px; cursor: pointer; font-weight: 500;
+}
+.btn:hover { background: #3a5ce0; }
+.winner-row { background: #d4edda !important; font-weight: bold; }
+.priority-bar {
+  height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden;
+}
+.priority-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #ff9800, #f44336); }

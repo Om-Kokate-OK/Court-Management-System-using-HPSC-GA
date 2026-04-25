@@ -1,0 +1,21 @@
+case_id,case_type,severity,urgency,complexity,filed_date,deadline,public_interest,plaintiff,defendant,estimated_duration
+CASE-2002,criminal,9,10,8,2024-01-05,2025-01-10,9,State of California,Michael Johnson,5
+CASE-2004,civil,5,6,6,2024-03-15,2025-02-20,3,ABC Constructions,XYZ Suppliers,4
+CASE-2006,family,6,9,4,2024-07-10,2025-01-12,2,Emma Watson,Daniel Watson,2
+CASE-2008,corporate,8,7,9,2024-02-25,2025-03-01,6,Google LLC,Startup AI Inc,6
+CASE-2010,criminal,10,10,9,2024-01-01,2025-01-05,10,State of Texas,John Wick,7
+CASE-2012,civil,4,5,5,2024-05-12,2025-04-01,2,John Traders,Ravi Exports,3
+CASE-2014,family,5,8,3,2024-09-20,2025-01-18,2,Anita Sharma,Rahul Sharma,2
+CASE-2016,corporate,7,6,8,2024-06-01,2025-03-10,5,Amazon Inc,Flipkart Ltd,5
+CASE-2018,criminal,8,9,7,2024-02-14,2025-01-08,8,State of NY,Robert King,4
+CASE-2020,civil,6,5,6,2024-04-10,2025-02-25,3,Sun Pharma,Cipla Ltd,4
+CASE-2022,criminal,9,10,8,2024-01-20,2025-01-06,9,State of Florida,Tony Montana,6
+CASE-2024,family,4,7,3,2024-10-01,2025-01-20,2,Sarah Lee,David Lee,2
+CASE-2026,corporate,9,8,9,2024-03-05,2025-02-15,7,Tesla Inc,Rivian Motors,7
+CASE-2028,civil,7,6,7,2024-05-18,2025-03-05,3,Infosys Ltd,TCS Ltd,5
+CASE-2030,criminal,7,8,6,2024-06-22,2025-01-15,6,State of Delhi,Aman Verma,4
+CASE-2032,family,3,9,2,2024-11-05,2025-01-10,2,Priya Kapoor,Raj Kapoor,1
+CASE-2034,civil,5,4,5,2024-08-30,2025-04-15,2,Citizen Group,Municipal Corp,3
+CASE-2036,criminal,10,10,7,2024-02-01,2025-01-07,10,State of Maharashtra,Underworld Don,6
+CASE-2038,corporate,6,6,7,2024-07-25,2025-03-25,4,Meta Inc,X Corp,5
+CASE-2040,family,10,10,10,2024-09-15,2025-01-25,3,Parent A,Parent B,1
