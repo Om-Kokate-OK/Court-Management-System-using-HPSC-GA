@@ -340,7 +340,7 @@ CASE-1002,civil,4,5,6,2024-09-20,2025-03-20,2,Alice Corp,Bob Inc,3`}
             <p style={{ color: '#666', fontSize: 13, marginBottom: 12 }}>
               See which cases each algorithm prioritizes first. HPCS-GA should pick urgent + severe cases.
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
               {Object.entries(assignments).map(([algoName, items]) => (
                 <div key={algoName} style={{
                   border: algoName.includes('HPCS') ? '3px solid #4caf50' : '1px solid #ddd',
@@ -373,7 +373,7 @@ CASE-1002,civil,4,5,6,2024-09-20,2025-03-20,2,Alice Corp,Bob Inc,3`}
       )}
 
       {/* ALGORITHM DETAILS */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 16, marginTop: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginTop: 16 }}>
         {algorithmsInfo.map(a => (
           <div key={a.name} className="card" style={{
             borderLeft: a.name.includes('HPCS') ? '5px solid #4caf50' : '5px solid #ddd'

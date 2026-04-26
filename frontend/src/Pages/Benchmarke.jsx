@@ -6,12 +6,16 @@ export default function Benchmark() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [numCases, setNumCases] = useState(200);
+  const [numRooms, setNumRooms] = useState(5);
 
   const run = async () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.get('http://localhost:8000/api/benchmark');
+      const res = await axios.get('http://localhost:8000/api/benchmark', {
+        params: { num_cases: numCases, num_rooms: numRooms }
+      });
       setResults(res.data.results || []);
     } catch (err) {
       setError(err.response?.data?.detail || 'Benchmark request failed');
@@ -25,6 +29,30 @@ export default function Benchmark() {
       <h1 className="page-title">📊 Algorithm Benchmark</h1>
       <div className="card">
         <p>Compare HPCS-GA against FCFS, Original Weighted, and SJF on real metrics.</p>
+        <div style={{ display: 'flex', gap: 12, marginTop: 12, flexWrap: 'wrap' }}>
+          <label>
+            Cases
+            <input
+              type="number"
+              min="20"
+              max="2000"
+              value={numCases}
+              onChange={(e) => setNumCases(Number(e.target.value || 0))}
+              style={{ marginLeft: 8, width: 90 }}
+            />
+          </label>
+          <label>
+            Courtrooms
+            <input
+              type="number"
+              min="2"
+              max="30"
+              value={numRooms}
+              onChange={(e) => setNumRooms(Number(e.target.value || 0))}
+              style={{ marginLeft: 8, width: 70 }}
+            />
+          </label>
+        </div>
         <button className="btn" style={{ marginTop: 12 }} onClick={run} disabled={loading}>
           {loading ? '⏳ Running...' : '▶️ Run Benchmark'}
         </button>

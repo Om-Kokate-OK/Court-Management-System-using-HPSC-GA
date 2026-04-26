@@ -1,34 +1,59 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import Dashboard from './Pages/Dashboard';
 import Cases from './Pages/cases';
 import Courtrooms from './Pages/CourtRoom';
 import Schedule from './Pages/Schedule';
 import Benchmark from './Pages/Benchmarke';
 import Comparison from './Pages/Comparison';
-import { Scale, FileText, Building2, Calendar, BarChart3, Trophy } from 'lucide-react';
+import AlgorithmStudio from './Pages/AlgorithmStudio';
+import ArchitectureLab from './Pages/ArchitectureLab';
+import LiveSimulation from './Pages/LiveSimulation';
+import { Scale, FileText, Building2, Calendar, BarChart3, Trophy, Activity, PlayCircle } from 'lucide-react';
 import './App.css';
 
 function App() {
+  const navItems = [
+    { to: '/', icon: BarChart3, label: 'Dashboard' },
+    { to: '/cases', icon: FileText, label: 'Cases' },
+    { to: '/courtrooms', icon: Building2, label: 'Courtrooms' },
+    { to: '/schedule', icon: Calendar, label: 'Smart Schedule' },
+    { to: '/benchmark', icon: BarChart3, label: 'Benchmark' },
+    { to: '/comparison', icon: Trophy, label: 'Algo Comparison' },
+    { to: '/studio', icon: Activity, label: 'Algorithm Studio' },
+    { to: '/simulation', icon: PlayCircle, label: 'Live Simulation' },
+  ];
+
   return (
     <BrowserRouter>
       <div className="app">
         <aside className="sidebar">
-          <div className="logo">
+          <div className="logo card-glow">
             <Scale size={32} />
             <h2>JusticeFlow</h2>
             <p>Court Management System</p>
           </div>
           <nav>
-            <Link to="/"><BarChart3 size={18} /> Dashboard</Link>
-            <Link to="/cases"><FileText size={18} /> Cases</Link>
-            <Link to="/courtrooms"><Building2 size={18} /> Courtrooms</Link>
-            <Link to="/schedule"><Calendar size={18} /> Smart Schedule</Link>
-            <Link to="/benchmark"><BarChart3 size={18} /> Benchmark</Link>
-            <Link to="/comparison"><Trophy size={18} /> Algo Comparison</Link>
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/'}
+                  className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+                >
+                  <Icon size={18} /> {item.label}
+                </NavLink>
+              );
+            })}
           </nav>
+          <div className="sidebar-footer">
+            <p>Adaptive scheduling for faster and fairer hearings.</p>
+          </div>
         </aside>
         <main className="content">
+          <div className="content-backdrop" aria-hidden="true" />
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/cases" element={<Cases />} />
@@ -36,6 +61,9 @@ function App() {
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/benchmark" element={<Benchmark />} />
             <Route path="/comparison" element={<Comparison />} />
+            <Route path="/studio" element={<AlgorithmStudio />} />
+            <Route path="/simulation" element={<LiveSimulation />} />
+            <Route path="/architecture-lab" element={<ArchitectureLab />} />
           </Routes>
         </main>
       </div>

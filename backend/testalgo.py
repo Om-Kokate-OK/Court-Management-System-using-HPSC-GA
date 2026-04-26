@@ -47,11 +47,11 @@ rooms = [
 # Run HPCS-GA
 algo = HPCS_GA()
 
-print("\n📊 Priority Scores:")
+print("\n Priority Scores:")
 for c in cases:
     print(f"  {c.id} ({c.case_type}): Priority = {algo.priority_score(c)}")
 
-print("\n🤖 Running HPCS-GA Assignment...")
+print("\n Running HPCS-GA Assignment...")
 assignments = algo.assign(cases, rooms)
 
 print(f"\n✅ Got {len(assignments)} assignments:\n")
@@ -60,7 +60,7 @@ for a in assignments:
     print(f"    Priority: {a['priority_score']}, Cost: {a['cost']}\n")
 
 print("=" * 60)
-print("🧪 TEST 2: Full Benchmark (100 cases, 20 rooms)")
+print(" TEST 2: Full Benchmark (100 cases, 20 rooms)")
 print("=" * 60)
 
 results, _, _ = run_benchmark()

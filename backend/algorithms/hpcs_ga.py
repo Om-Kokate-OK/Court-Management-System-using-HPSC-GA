@@ -72,6 +72,7 @@ class HPCS_GA:
         self.ga_generations  = ga_generations
         self.ga_pop_size     = ga_pop_size
         self.reference_time  = reference_time
+        self.ga_history: List[Dict] = []
 
         self.cases_per_day_per_room = cases_per_day_per_room
 
@@ -325,6 +326,7 @@ class HPCS_GA:
         """
         POP  = self.ga_pop_size
         GENS = self.ga_generations
+        self.ga_history = []
 
         # Sample a subset of cases to keep GA evaluation fast
         sample = random.sample(cases, min(GA_SAMPLE_CAP, len(cases)))
@@ -338,11 +340,28 @@ class HPCS_GA:
         best_weights = max(population, key=lambda w: self._ga_fitness(w, sample, rooms))
         best_fitness = self._ga_fitness(best_weights, sample, rooms)
 
-        for _ in range(GENS):
+        for generation in range(GENS):
             fitnesses = [self._ga_fitness(ch, sample, rooms) for ch in population]
 
-            # Update global best
             gen_best_idx = max(range(POP), key=lambda i: fitnesses[i])
+            gen_worst_idx = min(range(POP), key=lambda i: fitnesses[i])
+            gen_best = population[gen_best_idx]
+
+            self.ga_history.append({
+                'generation': generation,
+                'best_fitness': round(fitnesses[gen_best_idx], 6),
+                'avg_fitness': round(sum(fitnesses) / len(fitnesses), 6),
+                'worst_fitness': round(fitnesses[gen_worst_idx], 6),
+                'best_weights': {
+                    'alpha': round(gen_best[0], 4),
+                    'beta': round(gen_best[1], 4),
+                    'gamma': round(gen_best[2], 4),
+                    'delta': round(gen_best[3], 4),
+                    'epsilon': round(gen_best[4], 4),
+                }
+            })
+
+            # Update global best
             if fitnesses[gen_best_idx] > best_fitness:
                 best_fitness = fitnesses[gen_best_idx]
                 best_weights = population[gen_best_idx]
@@ -373,6 +392,102 @@ class HPCS_GA:
             population = new_pop
 
         return best_weights
+
+    def get_ga_history(self) -> List[Dict]:
+        return list(self.ga_history)
+
+    def explain_hungarian(
+        self,
+        cases: List[Case],
+        rooms: List[Courtroom],
+        top_n: int = 12,
+    ) -> Dict:
+        """Return step-by-step internals for one Hungarian batch."""
+        if not cases or not rooms:
+            return {
+                'cases': [],
+                'rooms': [],
+                'cost_matrix': [],
+                'slot_matrix': [],
+                'selected_pairs': [],
+                'steps': ['No data available to visualize.']
+            }
+
+        self._get_reference_time(cases)
+        ranked = sorted(cases, key=lambda c: -self.priority_score(c))[:max(1, top_n)]
+        room_loads = {r.id: 0 for r in rooms}
+        C_full = self.build_cost_matrix(ranked, rooms, room_loads)
+        n, m = C_full.shape
+
+        cost_matrix = []
+        for i in range(n):
+            row = []
+            for j in range(m):
+                row.append(None if C_full[i][j] >= INF else round(float(C_full[i][j]), 3))
+            cost_matrix.append(row)
+
+        feasible_rows = [i for i in range(n) if not np.all(C_full[i] == INF)]
+        slot_matrix = []
+        selected_pairs = []
+
+        if feasible_rows:
+            C = C_full[feasible_rows, :]
+            slots_per_room = self.cases_per_day_per_room
+            C_tiled = np.tile(C, slots_per_room)
+            max_cols = len(feasible_rows)
+            C_tiled = C_tiled[:, :max_cols]
+            C_tiled = np.where(C_tiled >= INF, INF / 2, C_tiled)
+
+            for i in range(C_tiled.shape[0]):
+                slot_row = []
+                for j in range(C_tiled.shape[1]):
+                    slot_row.append(round(float(C_tiled[i][j]), 3))
+                slot_matrix.append(slot_row)
+
+            row_idx, col_idx = linear_sum_assignment(C_tiled)
+            for r, c in zip(row_idx, col_idx):
+                room_idx = c % m
+                case_idx = feasible_rows[r]
+                if C_full[case_idx, room_idx] >= INF:
+                    continue
+                selected_pairs.append({
+                    'case_id': ranked[case_idx].id,
+                    'room_id': rooms[room_idx].id,
+                    'room_name': rooms[room_idx].name,
+                    'slot_col': int(c),
+                    'cost': round(float(C_tiled[r][c]), 3)
+                })
+
+        steps = [
+            f'1) Ranked {len(ranked)} cases using HPCS priority score.',
+            '2) Built cost matrix with hard expertise constraints (null means infeasible).',
+            f'3) Expanded room columns into slots ({self.cases_per_day_per_room} slots per room).',
+            '4) Ran Hungarian assignment to minimize total cost.',
+            f'5) Selected {len(selected_pairs)} optimal case-room pairs for this batch.'
+        ]
+
+        return {
+            'cases': [
+                {
+                    'id': c.id,
+                    'case_type': c.case_type,
+                    'priority_score': self.priority_score(c)
+                }
+                for c in ranked
+            ],
+            'rooms': [
+                {
+                    'id': r.id,
+                    'name': r.name,
+                    'expertise': r.judge_expertise
+                }
+                for r in rooms
+            ],
+            'cost_matrix': cost_matrix,
+            'slot_matrix': slot_matrix,
+            'selected_pairs': selected_pairs,
+            'steps': steps
+        }
 
     # =========================================================================
     # PUBLIC — assign()
